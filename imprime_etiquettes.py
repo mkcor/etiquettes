@@ -44,7 +44,7 @@ def print_one_order(i):
 
 def print_sheet(i):
     # Print two consecutive orders on one sheet
-    with open(file_name, 'x') as f:
+    with open(file_name, 'x', encoding='utf-8') as f:
         f.write('<!DOCTYPE html>')
         f.write('<html>')
         f.write('<body>')
