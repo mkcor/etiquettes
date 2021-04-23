@@ -50,8 +50,12 @@ def print_sheet(i):
 if __name__ == '__main__':
     # Load table
     df = pd.read_csv('feuille_commandes.csv')
+    # Filter for orders to print
+    df = df[df['Flag'] == 'P']
     # Replace NaN's with empty strings
     df.fillna('', inplace=True)
+    # Reset index
+    df.reset_index(drop=True, inplace=True)
     for i in range(df.shape[0]):
         file_name = f'etiquette_{i}.html'
         print_sheet(i)
