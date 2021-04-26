@@ -17,16 +17,28 @@ def find_address_France(adresse):
         return [ad1, ad2]
 
 
-def print_one_order(i):
+def find_address_intnl(adresse):
+    ad_lines = adresse.split('\r\n')
+    ad_lines = [a.rstrip(',') for a in ad_lines]
+    ad_lines[-1] = ad_lines[-1].upper()
+    return ad_lines
+
+
+def print_one_order(i, flag):
     # Load data for row i
     prenom = df.loc[i, 'Prénom']
     nom = df.loc[i, 'Nom']
     adresse = df.loc[i, 'Adresse']
-    ad = find_address_France(adresse)
+    if flag == 'P':
+        ad = find_address_France(adresse)
+    elif flag == 'PE':
+        ad = find_address_intnl(adresse)
+    else:
+        pass
     ad_lines = [f'<h1>{a}</h1>' for a in ad]
     commande = df.loc[i, 'Commande']
     items = [f'<li>{c}</li>' for c in commande.split(';')]
-    string = f'<h1 class="tiny-margin"> {prenom} {nom.upper()} </h1>'
+    string = f'<h1 class="tiny-margin"> {prenom.title()} {nom.upper()} </h1>'
     for al in ad_lines:
         string += al
     string += (
@@ -47,7 +59,7 @@ def print_one_order(i):
     return string
 
 
-def print_sheet(i):
+def print_sheet(i, flag):
     # Print two consecutive orders on one sheet
     with open(file_name, 'x', encoding='utf-8') as f:
         f.write('<!DOCTYPE html>')
@@ -58,8 +70,8 @@ def print_sheet(i):
         f.write('.top-margin { margin-top: 2cm; }')
         f.write('</style>')
 
-        f.write(print_one_order(i))
-        f.write(print_one_order(i + 1))
+        f.write(print_one_order(i, flag))
+        f.write(print_one_order(i + 1, flag))
 
         f.write('</html>')
         f.write('</body>')
@@ -69,6 +81,8 @@ if __name__ == '__main__':
     df = pd.read_csv('feuille_commandes.csv')
     # Filter for orders to print
     flag = sys.argv[1]
+    if flag not in ['P', 'PE']:
+        raise ValueError('Donner la valeur P ou PE au paramètre flag')
     df = df[df['Flag'] == flag]
     # Replace NaN's with empty strings
     df.fillna('', inplace=True)
@@ -76,4 +90,4 @@ if __name__ == '__main__':
     df.reset_index(drop=True, inplace=True)
     for i in range(0, df.shape[0], 2):
         file_name = f'etiquette_{i}.html'
-        print_sheet(i)
+        print_sheet(i, flag)
