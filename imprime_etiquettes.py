@@ -1,4 +1,5 @@
 import re
+import sys
 
 import numpy as np
 import pandas as pd
@@ -67,7 +68,8 @@ if __name__ == '__main__':
     # Load table
     df = pd.read_csv('feuille_commandes.csv')
     # Filter for orders to print
-    df = df[df['Flag'] == 'P']
+    flag = sys.argv[1]
+    df = df[df['Flag'] == flag]
     # Replace NaN's with empty strings
     df.fillna('', inplace=True)
     # Reset index
