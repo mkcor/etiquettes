@@ -12,8 +12,8 @@ def find_address_France(adresse):
     if search is None:
         return ''
     else:
-        ad1 = adresse[:search.span()[0]].replace(',','')
-        ad2 = adresse[search.span()[0]:].replace('.','').upper()
+        ad1 = adresse[:search.span()[0]].replace(',', '')
+        ad2 = adresse[search.span()[0]:].replace('.', '').upper()
         return [ad1, ad2]
 
 
