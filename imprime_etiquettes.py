@@ -18,7 +18,8 @@ def find_address_France(adresse):
 
 
 def find_address_intnl(adresse):
-    ad_lines = adresse.split('\r\n')
+    ad_lines = adresse.split('\n')
+    ad_lines = [a.rstrip('\r') for a in ad_lines]
     ad_lines = [a.rstrip(',') for a in ad_lines]
     ad_lines[-1] = ad_lines[-1].upper()
     return ad_lines
